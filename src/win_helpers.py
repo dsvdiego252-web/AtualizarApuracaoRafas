@@ -59,6 +59,17 @@ def conectar_superus(caminho_executavel: str, exigir_ja_aberto: bool, timeout: i
 
 
 def janela_principal(app: Application):
+    """Retorna a janela do Superus que tem a barra de menu (Fiscal/Contábil
+    etc.), não necessariamente a última janela em foco — se o Superus foi
+    deixado aberto numa tela filha (ex.: grade do SPED), `top_window()`
+    pega essa tela filha, que não tem menu próprio.
+    """
+    for candidata in app.windows(visible_only=True):
+        try:
+            if candidata.menu() is not None:
+                return candidata
+        except Exception:
+            continue
     return app.top_window()
 
 
