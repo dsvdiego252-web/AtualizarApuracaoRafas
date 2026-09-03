@@ -121,17 +121,17 @@ def _selecionar_linha_loja(grade, config: Config, loja: Loja, hoje) -> None:
 
 def _clicar_editar_escrituracao(sped_win, grade) -> None:
     """Clica o 2º botão da barra de ferramentas da grade ("alterar
-    escrituração selecionada"). Tenta primeiro via UI Automation (toolbar
-    + índice do botão); se não achar, cai para reconhecimento de imagem.
+    escrituração selecionada"), por reconhecimento de imagem, restrito à
+    área da própria janela do SPED — evita acertar um ícone parecido em
+    outra parte da tela (ex.: barra lateral da janela principal).
+
+    Não tentamos mais adivinhar esse botão via UI Automation: nessa grade
+    (DevExpress TcxGrid) esse chute clicou em outro lugar da tela sem
+    querer, tirando o foco da tela do SPED.
     """
-    try:
-        barra = sped_win.child_window(control_type="ToolBar")
-        botoes = barra.children(control_type="Button")
-        botoes[1].click_input()  # 2º botão, índice 1
-        return
-    except Exception:
-        logger.debug("Não achei o botão via UI Automation — tentando por imagem.")
-    clicar_icone("editar_escrituracao.png")
+    regiao_sped = sped_win.rectangle()
+    regiao = (regiao_sped.left, regiao_sped.top, regiao_sped.width(), regiao_sped.height())
+    clicar_icone("editar_escrituracao.png", regiao=regiao)
 
 
 def _atualizar_data_final_e_reprocessar(sped_win, grade, config: Config, loja: Loja, hoje, pasta_execucao: Path) -> None:
