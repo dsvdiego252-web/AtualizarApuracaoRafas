@@ -1,0 +1,36 @@
+# Configuração da rotina de apuração ICMS/IPI (SPED EFD) no Superus.
+# Ajuste caminhos/lojas aqui — não é necessário mexer no código Python.
+
+superus:
+  executavel: 'C:\Superus\Superus.exe'
+  # Se true (recomendado), a rotina exige que o Superus já esteja aberto
+  # e logado, e falha com mensagem clara se não estiver — login
+  # automatizado NÃO é suportado por esta automação.
+  exigir_processo_ja_aberto: true
+  timeout_janela_segundos: 30
+
+pasta_relatorios:
+  # Placeholders disponíveis: {ano}, {mes:02d}, {mes_abrev}, {ano_curto}
+  padrao: 'C:\Users\TI\Documents\Apuração ICMS Detalhada\AP Faria\Dados\Ano - {ano}\{mes:02d} - {mes_abrev} {ano_curto}'
+
+lojas:
+  - numero: 1
+    nome_superus: 'APFARIA - MATRIZ'
+    arquivo_cfop: 'Loja 01.xlsx'
+    arquivo_aliquota: 'Loja 01 - Aliquotas.xlsx'
+  - numero: 3
+    nome_superus: 'APFARIA - FILIAL'
+    arquivo_cfop: 'Loja 02.xlsx'
+    arquivo_aliquota: 'Loja 02 - Aliquotas.xlsx'
+  # Loja 18 (LOJA 01 - FRANCANO) fica de fora por enquanto — não incluída.
+
+execucao:
+  # Data final da escrituração, formato ddmmaaaa. Deixe null para usar
+  # sempre "ontem" em relação à data de execução (comportamento padrão).
+  data_final_override: null
+  pausa_entre_acoes_segundos: 0.6
+  timeout_processamento_segundos: 240
+  # Se true, pausa e pede confirmação manual (Enter no terminal) quando a
+  # linha da grade não for localizada automaticamente — útil na primeira
+  # calibração. Deixe false para rodar 100% desassistido depois de validado.
+  modo_assistido: false
