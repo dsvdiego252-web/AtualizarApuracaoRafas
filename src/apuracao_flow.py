@@ -43,10 +43,13 @@ def abrir_tela_sped(janela_principal):
     janela_principal.menu_select(CAMINHO_MENU_SPED)
     sped_win = aguardar_janela(r"SPED.*ICMS.*IPI", timeout=30)
 
-    # SUPOSIÇÃO A CALIBRAR: tipo/classe real da grade. Tentamos alguns
-    # candidatos comuns antes de desistir.
+    # A grade de escriturações é um TcxGrid (componente DevExpress
+    # ExpressQuantumGrid) — confirmado via scripts/calibrar_ui.py na
+    # máquina real. O TcxGridSite interno é quem recebe foco/teclado.
     grade = None
     for tentativa in (
+        dict(class_name="TcxGridSite"),
+        dict(class_name="TcxGrid"),
         dict(control_type="Table"),
         dict(control_type="DataGrid"),
         dict(class_name_re=r"(?i)(grid|dbgrid)"),
